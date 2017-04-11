@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Humara Naksha</title>
+        <link rel="stylesheet" href="lib/leaflet/leaflet.css"/>
+        <link rel="stylesheet" href="lib/leaflet/leaflet.label.css"/>
+		<link rel="stylesheet" href="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.css" />
+		
+        <script src="lib/leaflet/leaflet.js"></script>
+        <script src="data/dehradun.geojson"></script>
+        <script src="lib/leaflet/Bing.js"></script>
+        <script src="lib/leaflet/leaflet.label.js"></script>
+        <script src="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+        <script src='https://api.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.js'></script>
+        <link href='https://api.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet' />
+        
+        <style type="text/css">
+            #map {height: 550px;} 
+            .legend{background:white; line-height:1.5em}
+            .legend i {width:2em; float:left}
+        </style>
+    </head>
+    <body>
+        <div id="map"></div>
+        <script>
+        
+            var colaba_roads;
+            
+            function highlightFeature(e){
+                var layer = e.target;
+                layer.setStyle(
+                    {
+                    weight:5,
+                    color:'black'
+                    //fillColor: 'white'
+                    //fillOpacity: 0.5
+                    }
+                );
+                if(!L.Browser.ie && !L.Browser.opera)
+                layer.bringToFront();
+                
+            }
+            
+            function resetHighlight(e){
+                colaba_roads.resetStyle(e.target);
+                }
+                
+            function zoomToFeature(e){
+                map.fitBounds(e.target.getBounds());
+                }
+                
+            function roadsOnEachFeature(feature, layer){
+                layer.bindLabel(feature.properties.name, {noHide:true});
+                layer.on(
+                    {
+                        mouseover:highlightFeature,
+                        mouseout:resetHighlight,
+                        click:zoomToFeature
+                    }
+                );
+                }
+            
+            function colaba_style(feature){
+                return{
+                    //color: getroadColor(feature.properties.name),
+                    //color: getroadColor(),
+                    color: 'red',
+                    opacity:1,
+                    dashArray:2
+                }
+            }
+            function getroadColor(name){
+                //if(high.localeCompare('residential')==0)
+                if(name!=null)
+                //var a=1;
+                //var b=1;
+                //if(a==b)
+                    return 'green';
+                else
+                    return 'red';
+            }
+			//function locateUser(){
+			//	map.locate({setview:true});
+			//}
+			        
+            var map=L.map('map').setView([18.91, 72.82], 14);
+            //var bingLayer = new L.BingLayer("AkErn6IFlYKIm4Mp34p-ayPl_zTVk6LoUyp4J9HftaB_KJdDkBV6MmOV4eWKciNF", {type: roads});
+            var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+            map.addLayer(osm);//BASEMAP
+            
+            
+            
+            /*
+            //COLABA MUMBAI
+            colaba_roads=L.geoJson(
+                roads,
+                {
+                    style: colaba_style,
+                    //onEachFeature:roadsOnEachFeature
+                }
+                ).addTo(map);
+            */
+            var dehraroads=L.geoJson(
+                roads_dehra,
+                    {style: colaba_style}
+                ).addTo(map);
+            
+            map.fitBounds(dehraroads.getBounds());
+            map.addControl(new L.Control.Layers({'OSM':osm, "Roads":dehraroads}, {}));
+            
+            //Locate Control plugin used here
+			L.control.locate({
+			locateOptions: {
+               enableHighAccuracy: true
+			}}).addTo(map);
+            
+            /*
+            // LEGEnd
+            var legend=L.control({position: 'bottomright'});
+            legend.onAdd=function(map){
+                var div = L.DomUtil.create('div','legend');
+                var labels = ["Named Roads", "Un-named Roads"];
+                var grades=["abc", null];
+                div.innerHTML='<div><b>Legend</b></div>';
+                for(var i=0; i<=1;i++){
+                    div.innerHTML +='<i style="background:'+getroadColor(grades[i])+'">&nbsp;&nbsp;</i>&nbsp;&nbsp;' + labels[i]+'<br />';
+                    }
+                    return div;
+					
+                }
+                legend.addTo(map);
+              */  
+                
+                var point =[30.33,78.05];
+                var marker=L.marker(point).addTo(map); //simple marker
+                /*var circle=L.circle(point, 10,
+                {
+                    color: 'orange',
+                    fillColor: 'purple',
+                    fillOpacity:0.5
+                }
+                ).addTo(map)
+                */
+                /*
+                var greeIcon=L.icon(
+                    {
+                    iconUrl:"http://leafletjs.com/examples/custom-icons/leaf-green.png",
+                    shadowUrl: "http://leafletjs.com/examples/custom-icons/leaf-shadow.png",
+                    iconSize:[50,50],
+                    //iconAnchor:[0,0],
+                    //shadowAnchor:[2,2],
+                    //popupAnchor:[0,0]
+                        });
+				*/
+                //var marker=L.marker(point, {icon:greeIcon}).addTo(map);
+                marker.bindPopup(
+                    //'<b>This place is good. mmmm!!</b>'
+                    '<b>Colaba</b><div><form action = "go.php" method = "post"><BR>ID<input type="text" name = "ID"><BR>Name<input type = "text" name = "name"><input type="submit"></div>',{minWidth:256}
+              
+                );
+                
+                
+                
+            
+        </script>
+    </body>
+</html>
