@@ -1,0 +1,33 @@
+<!doctype HTML>
+<HEAD>
+	<TITLE>Aao apne options select karlo!!!!</TITLE>
+</HEAD>
+<BODY bgcolor = cornsilk>
+	<script type = "text/javascript">
+		function toggleVisibility(id) {
+		   var el = document.getElementById(id);
+
+		   if (el.style.visibility=="visible") {
+				  el.style.visibility="hidden";
+			 }
+			 else {
+				  el.style.visibility="visible";
+			 }
+		 }
+	</script>
+	<P>State your requirements here :-
+	<BR><form action = "" method = "get" name = "choice">
+	<OL>
+		<LI> <input title = "chai" type = "checkbox" name = "tea" id = "tea" onchange = "toggleVisibility('imgtea')">Tea 
+		<LI> <input title = "snacks" type = "checkbox" name = "snacks" id = "snacks" onchange = "toggleVisibility('imgsnacks')">Snacks	
+		<LI> <input title = "paan" type = "checkbox" name = "paan" id = "paan" onchange = "toggleVisibility('imgpaan')">Paan
+	</OL>
+	<input type = "submit" name = "sub">
+	</form>
+	<img id="imgtea" src="images\Boss Ek Cutting Chai_zpsd3vsxpys.jpg"  style="visibility:hidden" height = 150 width = 120/>
+	<img id="imgsnacks" src="images\chaat.jpg"  style="visibility:hidden" height = 160 width = 140/>
+	<img id="imgpaan" src="images\dribble_paan-beedi_shop.jpg"  style="visibility:hidden" height = 160 width = 160/>
+	</P>
+	LIST OF STREET FOOD VENDORS IN THE FORM OF TABLE HERE!!!
+</BODY>
+</HTML>
